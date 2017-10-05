@@ -23,4 +23,8 @@ public class BST<E extends Comparable<E>> {
 	return this.root;
     }
 
+    public void insert(E value){
+	
+    }
+
 }
