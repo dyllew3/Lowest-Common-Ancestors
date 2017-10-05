@@ -1,3 +1,4 @@
+
 public class BST<E extends Comparable<E>> {
 
     private Node root;
@@ -24,7 +25,18 @@ public class BST<E extends Comparable<E>> {
     }
 
     public void insert(E value){
-	
+	root = insert(root, value);
     }
 
+    private Node insert(Node x, E value){
+	if(x == null) return new Node(value);
+	int cmp = value.compareTo(x.value);
+	if(cmp < 0){
+	    x.left = insert(x.left, value);
+	}
+	if(cmp > 0){
+	    x.right = insert(x.right, value);
+	}
+	return x;
+    }
 }
