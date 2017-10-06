@@ -1,6 +1,6 @@
 
 public class BST<E extends Comparable<E>> {
-
+    
     private Node root;
     private int size;
     
@@ -24,8 +24,13 @@ public class BST<E extends Comparable<E>> {
 	return this.root;
     }
 
+    public int getSize(){
+	return this.size;
+    }
+    
     public void insert(E value){
 	root = insert(root, value);
+	size++;
     }
 
     private Node insert(Node x, E value){

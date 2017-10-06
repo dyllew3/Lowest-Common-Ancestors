@@ -6,6 +6,24 @@ import static org.junit.Assert.*;
 
 public class TestBST {
 
+    public boolean isInTree(BST<Integer> testTree, Integer value){
+	/**
+	 * This function evaluates if a Binary Search Tree(BST) contains
+	 * an element. This will return false if an element is not in the
+	 * tree or if the tree doesn't behave correctly. 
+	 **/
+	int cmp = -1;
+	BST<Integer>.Node x = testTree.getRoot();
+	while(x != null && (cmp = value.compareTo(x.value)) != 0){
+	    if(cmp < 0)
+		x = x.left;
+	    else
+		x = x.right;
+	}
+	return cmp == 0;
+	
+    }
+    
     @Rule
     // No exception should be thrown during these tests
     public ExpectedException thrown= ExpectedException.none();
@@ -24,7 +42,7 @@ public class TestBST {
     }
 
     @Test
-    public void testNodeInitTrue(){
+    public void testNodeInit(){
 	/**
 	 * This test evaluates if Node a can be initialised with a value
 	 *.
@@ -68,5 +86,49 @@ public class TestBST {
 	}
 
     }
-    
+
+    @Test
+    public void testInsertTrue(){
+	int[][] testVals = {
+	    // Worst case
+	    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+	    // Best Case
+	    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	    // Next test case is randomised
+	    {1, 4, 25, 3, 5, 64, 6, 7},
+	    // Contains duplicates
+	    {10, 10, 9, 7, 5, 3, 1, 10, 1}
+	};
+	for(int [] testCase : testVals){
+	    BST<Integer> testBST = new BST<Integer>();
+	    for(int i : testCase)
+		testBST.insert(i);
+	    for(int j : testCase)
+		assertTrue("Binary Search tree not inserting: " + j +
+			   " correctly", isInTree(testBST, j));
+	}
+	
+    }
+
+
+    @Test
+    public void testInsertFalse(){
+	int[][] testVals = {
+	    // Worst case
+	    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+	    // Best Case
+	    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	    // Next test case is randomised
+	    {1, 4, 25, 3, 5, 64, 6, 7},
+	    // Contains duplicates
+	    {10, 10, 9, 7, 5, 3, 1, 10, 1}
+	};
+	for(int [] testCase : testVals){
+	    BST<Integer> testBST = new BST<Integer>();
+	    for(int i : testCase)
+		assertFalse("Binary Search tree should not have: " + i,
+			    isInTree(testBST, i));
+	}
+    }
+
 }
