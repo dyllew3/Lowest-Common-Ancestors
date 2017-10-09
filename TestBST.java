@@ -150,14 +150,14 @@ public class TestBST {
 	    {10, 10, 9, 7, 5, 3, 1, 10, 1},
 	    {5, 2, 3, 1, 4, 6, 2, 7, 6, 5}
 	};
-	// List of lowest common ancestors for the test
+	// List of lowest common ancestors for the each test case
 	int [] LCA = {8, 3, 4, 9, 2};
 	for(int i = 0; i < testVals.length ; i++){
 	    int [] testCase = testVals[i];
 	    BST<Integer> testBST = createTree(testCase);
 	    int lca = testBST.lca(testCase[2], testCase[3]);
 	    assertEquals("Expected: " + LCA[i] + " as lca but got:" + lca +
-			 " instead", lca, LAC[i]);
+			 " instead", lca, LCA[i]);
 	}
     }
 
