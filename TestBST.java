@@ -157,7 +157,7 @@ public class TestBST {
 	    BST<Integer> testBST = createTree(testCase);
 	    int lca = testBST.lca(testCase[2], testCase[3]);
 	    assertEquals("Expected: " + LCA[i] + " as lca but got:" + lca +
-			 " instead", lca, LAC[i]);
+			 " instead", lca, LCA[i]);
 	}
     }
 
