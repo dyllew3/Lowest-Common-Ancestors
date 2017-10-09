@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 public class TestBST {
 
+    
     public boolean isInTree(BST<Integer> testTree, Integer value){
 	/**
 	 * This function evaluates if a Binary Search Tree(BST) contains
@@ -23,6 +24,13 @@ public class TestBST {
 	return cmp == 0;
 	
     }
+
+    public BST<Integer> createTree(int [] values){
+	BST<Integer> bst = new BST<Integer>();
+	for(int i : values)
+	    bst.insert(i);
+	return bst;
+    } 
     
     @Rule
     // No exception should be thrown during these tests
@@ -114,9 +122,8 @@ public class TestBST {
     @Test
     public void testInsertFalse(){
 	int[][] testVals = {
-	    // Worst case
+	    // Worst cases
 	    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
-	    // Best Case
 	    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	    // Next test case is randomised
 	    {1, 4, 25, 3, 5, 64, 6, 7},
@@ -125,9 +132,32 @@ public class TestBST {
 	};
 	for(int [] testCase : testVals){
 	    BST<Integer> testBST = new BST<Integer>();
-	    for(int i : testCase)
+ 	    for(int i : testCase)
 		assertFalse("Binary Search tree should not have: " + i,
 			    isInTree(testBST, i));
+	}
+    }
+
+    @Test
+    public void testLCA(){       
+	int[][] testVals = {
+	    // Worst cases
+	    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+	    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+	    // Next test case is random series of numbers
+	    {1, 4, 25, 3, 5, 64, 6, 7},
+	    // Contains duplicates
+	    {10, 10, 9, 7, 5, 3, 1, 10, 1},
+	    {5, 2, 3, 1, 4, 6, 2, 7, 6, 5}
+	};
+	// List of lowest common ancestors for the test
+	int [] LCA = {8, 3, 4, 9, 2};
+	for(int i = 0; i < testVals.length ; i++){
+	    int [] testCase = testVals[i];
+	    BST<Integer> testBST = createTree(testCase);
+	    int lca = testBST.lca(testCase[2], testCase[3]);
+	    assertEquals("Expected: " + LCA[i] + " as lca but got:" + lca +
+			 " instead", lca, LAC[i]);
 	}
     }
 
