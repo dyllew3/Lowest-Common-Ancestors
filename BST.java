@@ -1,4 +1,4 @@
-public class BST<E extends Comparable<E>> {
+public class BST<E extends Comparable<E>> implements LCA<E> {
     
     private Node root;
     private int size;
@@ -44,7 +44,7 @@ public class BST<E extends Comparable<E>> {
 	return x;
     }
 
-
+    @Override
     public E lca(E val1, E val2){
 	/**
 	 * Finds the lowest common ancestor of two values.
