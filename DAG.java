@@ -6,6 +6,7 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
 
     
     private HashMap<E,HashSet<E>> vertices;
+    private HashMap<E,HashSet<E>> parents;
     private int size;
 
     private class DFS{
@@ -34,7 +35,7 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
 		return;
 	    }
 	    tempMark.add(node);
-	    for(E child : getEdges(node)){
+ 	    for(E child : getEdges(node)){
 		dfs(child);
 	    }
 	    permMark.add(node);
@@ -48,6 +49,7 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
     public DAG(){
 	this.size = 0;
 	this.vertices = new HashMap<E, HashSet<E>>();
+	this.parents = new HashMap<E, HashSet<E>>();
     }
 
     
@@ -60,6 +62,7 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
     public void insert(E val){
 	if(this.vertices.get(val) == null){
 	    this.vertices.put(val, new HashSet<E>());
+	    this.parents.put(val, new HashSet<E>());
 	    this.size++;
 	}
     }
@@ -73,13 +76,17 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
 	this.insert(v);
 	this.insert(w);
 	HashSet<E> vw = this.vertices.get(v);
+	HashSet<E> wv = this.parents.get(w);
 	if(!vw.contains(w)){
 	    vw.add(w);
+	    wv.add(v);
 	}
 	if(hasCycle()){
 	    vw.remove(w);
+	    wv.remove(v);
 	}
 	this.vertices.put(v, vw);
+	this.parents.put(w, wv);
     }
 
     public boolean hasCycle(){
@@ -87,8 +94,34 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
 	return cycle.cycle;
     }
 
+    public HashMap<E,Integer> ancestors(E node){
+	/**
+	 * Gets ancestors of a node and the shortest distance from the node
+	 * to the ancestor
+	 *
+	 *
+	 **/
+	HashMap<E, Integer> anc = new HashMap<E, Integer>();
+	for(E parent : this.parents.get(node)){
+	    anc.put(parent,1);
+	    this.ancestors(parent, 2, anc);
+	}
+	return anc;
+	
+    }
+    
+    private void ancestors(E start, int level, HashMap<E, Integer> anc){
+	for(E child : this.parents.get(start)){
+	    Integer curLev = anc.get(child);
+	    if(curLev == null || level < (int)curLev ){
+		anc.put(child, level);
+	    }
+	    this.ancestors(child, level + 1, anc);
+	    
+	}
+    }
+
     public int getSize(){
 	return this.size;
     }
 }
-

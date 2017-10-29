@@ -4,6 +4,9 @@ import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.ArrayList;
+
 public class TestDAG {
     
     @Test
@@ -19,6 +22,27 @@ public class TestDAG {
 	
     }
 
+    public ArrayList<HashMap<Integer, Integer>> ancestors(){
+	ArrayList<HashMap<Integer, Integer>> result;
+	result = new ArrayList<HashMap<Integer, Integer>>();
+	// List of all ancestors and their distance from the node
+	// In the form {Node1, dist1, Node2, dist2}
+	int [][] ancNode = {
+	    {1, 1, 3, 1},
+	    {0, 2, 2, 2, 3, 1, 1, 1},
+	    {1, 6, 2, 5, 3, 4, 4, 3, 5, 2, 6, 1},
+	    {},
+	};
+	for(int [] ancs : ancNode){
+	    HashMap<Integer, Integer> anc = new HashMap<Integer,Integer>();
+	    for(int i = 0; i < ancs.length - 1; i += 2){
+		anc.put(ancs[i], ancs[i + 1]);
+	    }
+	    result.add(anc);
+	}
+	return result;
+    } 
+    
     @Test
     public void testInsertTrue(){
 	/**
@@ -81,11 +105,11 @@ public class TestDAG {
 	    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	    {1, 4, 25, 3, 5, 64, 6, 7},
 	    //Duplicates
-	    {1,1,1,2,2,3,5,3,}
+	    {1,1,1,2,2,3,5,3}
 	};
 	int index = 0;
 	int [] sizes = {0,1,2,4,9,10,8,4};
-	for (int[] tests :testVals){	
+	for (int[] tests : testVals){	
 	    DAG<Integer> dag = new DAG<Integer>();
 	    for(int  i = 0; i < tests.length; i++){
 		dag.insert(tests[i]);
@@ -134,4 +158,30 @@ public class TestDAG {
 
     }
 
+    @Test
+    public void testAncestors(){
+	int[][] testVals = {
+	    {1,2,3,2},
+	    // Duplicate ancestors at 
+	    {0,2,2,3,3,4,0,1,1,6,1,4},
+	    // Straight line
+	    {1,2,2,3,3,4,4,5,5,6,6,7},
+	    // No ancestors
+	    {1,2,3,2},
+	};
+	ArrayList<HashMap<Integer, Integer>> ancestors = ancestors();
+	int[] ancCheck = {2, 4, 7, 3};
+	for (int i = 0; i < testVals.length ; i++){
+	    DAG<Integer> dag = new DAG<Integer>();
+	    int [] tests = testVals[i];
+	    for(int  j = 0; j < tests.length - 1 ; j += 2){
+		dag.connect(tests[j], tests[j + 1]);
+	    }
+	    assertTrue(dag.ancestors(ancCheck[i]).equals(ancestors.get(i)));
+	}
+	
+
+    }
+
+    
 }
