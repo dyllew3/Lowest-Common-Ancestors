@@ -45,7 +45,6 @@ public class BST<E extends Comparable<E>> implements Graph<E> {
 	return x;
     }
 
-    @Override
     public E lca(E val1, E val2){
 	/**
 	 * Finds the lowest common ancestor of two values.

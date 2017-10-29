@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class DAG<E extends Comparable<E>> implements Graph<E> {
 
@@ -53,9 +54,43 @@ public class DAG<E extends Comparable<E>> implements Graph<E> {
     }
 
     
-    @Override
-    public E lca(E val1, E val2){
-	return val1;
+    public ArrayList<E> lca(E val1, E val2){
+	ArrayList<E> result = new ArrayList<E>();
+	HashMap<E, Integer> anc1 = ancestors(val1);
+	HashMap<E, Integer> anc2 = ancestors(val2);
+	if(anc1.get(val2) != null){
+	    result.add(val2);
+	    return result;
+	}
+	if(anc2.get(val1) != null){
+	    result.add(val1);
+	    return result;
+	}
+	HashSet<E> common = new HashSet<E>(anc1.keySet());
+	common.retainAll(anc2.keySet());
+	int min1 = Integer.MAX_VALUE;
+	int min2 = Integer.MAX_VALUE;
+	for(E key : common){
+	    Integer dist1 = anc1.get(key);
+	    Integer dist2 = anc2.get(key);
+	    if(dist1 < min1 && dist2 < min2){
+		min1 = dist1;
+		min2 = dist2;
+		Iterator<E> i = result.iterator();
+		while(i.hasNext()){
+		    E newKey = i.next();
+		    if(anc1.get(newKey) > min1 && anc2.get(newKey) > min2)
+			i.remove();
+		}
+		result.add(key);
+	    }
+	    else if(dist1 < min1 && dist2 >= min2 ||
+		    dist1 >= min1 && dist2 < min2 ||
+		    dist1 == min1 && dist2 == min2){
+		result.add(key);
+	    }
+	}
+	return result;
     }
 
     @Override

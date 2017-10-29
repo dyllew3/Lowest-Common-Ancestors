@@ -139,12 +139,16 @@ public class TestDAG {
 
     @Test
     public void testConnectCycles(){
+	/**
+	 *
+	 * Tests connect method in DAG class when cycles are present
+	 **/
 	int[][] testVals = {
-	    {1,2,3,1},
-	    {1,2,2,4,3,4,1},
-	    {1,2,3,4,5,6,2,9},
+	    {1, 2, 3, 1},
+	    {1, 2, 2, 4, 3, 4, 1},
+	    {1, 2, 3, 4, 5, 6, 2, 9},
 	    // Multiple cycles
-	    {1,2,4,1,3,5,6,7,5,3}
+	    {1, 2, 4, 1, 3, 5, 6, 7, 5, 3}
 	};
 	
 	for (int[] tests :testVals){
@@ -160,6 +164,15 @@ public class TestDAG {
 
     @Test
     public void testAncestors(){
+	/**
+	 * Tests ancestors method in DAG class
+	 * Initialises graph then adds vertices and weights
+	 * in  the testVals array 
+	 * It creates an edge from vertex 1 to vertex 2
+	 * Where vertices are stored in the array in the form
+	 * {vertex1, vertex2, vertex2, vertex4, ...}
+	 *
+	 **/
 	int[][] testVals = {
 	    {1,2,3,2},
 	    // Duplicate ancestors at 
@@ -183,5 +196,37 @@ public class TestDAG {
 
     }
 
+    @Test
+    public void testLCA(){
+	int [][] testVals = {
+	    //One common ancestor
+	    {0,2,2,3,3,4,0,1,1,5,1,4,2,5},
+	    {1,2,2,3,3,4,4,5,5,6,6,7},
+	    // Multiple valid lowest common ancestors
+	    {6,4,6,5,7,4,7,5},
+	    {3,4,3,5,6,4,6,5,7,4,7,5},
+	    // No common ancestors
+	    {1,2,3,4,5,6},
+	    {1,4,2,4,3,5,6,5}
+	};
+	Integer [][] lcas = {
+	    {1},
+	    {4},
+	    {6,7},
+	    {3,6,7},
+	    {},
+	    {}
+	};
+	for(int i = 0; i < testVals.length; i++){
+	    DAG<Integer> dag = new DAG<Integer>();
+	    int [] tests = testVals[i];
+	    for(int j = 0; j < tests.length - 1; j += 2){
+		dag.connect(tests[j], tests[j + 1]);
+	    }
+	   assertArrayEquals(dag.lca(4, 5).toArray(), lcas[i]);
+
+	}
+    }
+    
     
 }
