@@ -1,4 +1,4 @@
-public class BST<E extends Comparable<E>> {
+public class BST<E extends Comparable<E>> implements Graph<E> {
     
     private Node root;
     private int size;
@@ -27,8 +27,9 @@ public class BST<E extends Comparable<E>> {
 	return this.size;
     }
     
-    public void insert(E value){
-	root = insert(root, value);
+    @Override
+    public void insert(E val){
+	root = insert(root, val);
 	size++;
     }
 
@@ -43,7 +44,6 @@ public class BST<E extends Comparable<E>> {
 	}
 	return x;
     }
-
 
     public E lca(E val1, E val2){
 	/**
